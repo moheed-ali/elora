@@ -241,9 +241,9 @@ main(int argc, char* argv[])
         "/home/alle/repos/ns-3-dev/contrib/elora/examples/bikes-mobility/netanim-background.png",
         -5000,
         -5000,
-        7.45,
-        7.35,
-        0.3);
+        4.2,
+        4.15,
+        0.6);
 
     animInt.UpdateNodeDescription(server, "LNS");
     animInt.UpdateNodeColor(server, 0, 0, 255);
