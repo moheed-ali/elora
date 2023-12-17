@@ -149,6 +149,9 @@ ChirpstackHelper::DoConnect()
     /* Create Ns-3 application */
     NewApplication(m_session.app);
 
+    SetupHTTPIntegrationForApplication(m_session.appId, "http://172.24.0.1:8081/");
+   
+
     return EXIT_SUCCESS;
 }
 
@@ -271,9 +274,36 @@ ChirpstackHelper::NewDeviceProfile(const str& name)
     return EXIT_SUCCESS;
 }
 
+int ChirpstackHelper::SetupHTTPIntegrationForApplication(const str& applicationId, const str& integrationUrl)
+{
+    str integrationPayload = "{"
+                             "  \"integration\": {"
+                             "    \"encoding\": \"JSON\","
+                             "    \"eventEndpointUrl\": \"" +
+                             integrationUrl +
+                             "\""
+                             "  }"
+                             "}";
+
+    str integrationReply;
+    str integrationEndpoint = "/api/applications/" + applicationId + "/integrations/http";
+
+    if (POST(integrationEndpoint, integrationPayload, integrationReply) == EXIT_FAILURE)
+    {
+        NS_FATAL_ERROR("Unable to set up HTTP integration for application, got reply: " << integrationReply);
+        return EXIT_FAILURE;
+    }
+
+    // Optionally, you may want to parse the integration reply if needed.
+
+    return EXIT_SUCCESS;
+}
+
+
 int
 ChirpstackHelper::NewApplication(const str& name)
 {
+
     str payload = "{"
                   "  \"application\": {"
                   "    \"description\": \"\","

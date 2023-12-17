@@ -82,6 +82,8 @@ class ChirpstackHelper
 
     int NewTenant(const str& name);
 
+    int SetupHTTPIntegrationForApplication(const str& applicationId, const str& integrationUrl);
+
     int NewDeviceProfile(const str& name);
 
     int NewApplication(const str& name);
