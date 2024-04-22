@@ -21,6 +21,14 @@
 #include "ns3/lorawan-helper.h"
 #include "ns3/udp-forwarder-helper.h"
 
+#include "ns3/chirpstack-helper.h"
+#include "ns3/hex-grid-position-allocator.h"
+#include "ns3/lorawan-helper.h"
+#include "ns3/periodic-sender-helper.h"
+#include "ns3/range-position-allocator.h"
+#include "ns3/udp-forwarder-helper.h"
+#include "ns3/urban-traffic-helper.h"
+
 using namespace ns3;
 using namespace lorawan;
 
@@ -38,12 +46,10 @@ main(int argc, char* argv[])
      ***************************/
 
     std::string tenant = "ELoRa";
-    std::string apiAddr = "127.0.0.1";
+    std::string apiAddr = "127.0.0.1";     
     uint16_t apiPort = 8090;
     std::string token =
-        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9."
-        "eyJhdWQiOiJjaGlycHN0YWNrIiwiaXNzIjoiY2hpcnBzdGFjayIsInN1YiI6IjZlMjQ4NjljLWQxMjItNDZkOS04Nz"
-        "E0LTM5Yzc4Nzg4OTRhZCIsInR5cCI6ImtleSJ9.IB20o6Jrcwj5qZ9mPEuthzzqMyc3YNSl8by_ZXrjqhw";
+        "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjaGlycHN0YWNrIiwiaXNzIjoiY2hpcnBzdGFjayIsInN1YiI6IjNlMDM2NmExLTAxOGMtNGUzMC04YzE4LTdkYWY5M2ZjOGVhMyIsInR5cCI6ImtleSJ9.OlrcGqVF77QuvsA9fgLK6kfOmD5XblTa03fTt7TciuM";
     uint16_t destPort = 1700;
 
     int periods = 24 * 31; // Hours
@@ -52,7 +58,7 @@ main(int argc, char* argv[])
     int nDevs = -1;
     std::string sir = "GOURSAUD";
 
-    std::string filepath = "None";
+    std::string filepath = "/home/eleve/ns-3-dev/contrib/elora/examples/bikes-mobility/201904-ns3-biketrips.csv";
 
     /* Expose parameters to command line */
     {
@@ -93,6 +99,10 @@ main(int argc, char* argv[])
                            DoubleValue(10 * log10(-1 / log(0.98))));
         ///////////////// Needed to manage the variance introduced by real world interaction
         Config::SetDefault("ns3::ClassAEndDeviceLorawanMac::RecvWinSymb", UintegerValue(16));
+        // Change FType to CONFIRMED_DATA_UP
+        // Config::SetDefault("ns3::BaseEndDeviceLorawanMac::FType", StringValue("Confirmed"));
+        Config::SetDefault("ns3::BaseEndDeviceLorawanMac::FType",
+                       EnumValue(LorawanMacHeader::CONFIRMED_DATA_UP));
     }
 
     /* Logging options */
